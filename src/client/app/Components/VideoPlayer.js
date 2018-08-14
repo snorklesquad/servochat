@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-
+import {Container, Segment, Header} from 'semantic-ui-react';
 export default class VideoPlayer extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+    }
     this.constraints = {
       audio: false,
       video: true
@@ -15,25 +17,31 @@ export default class VideoPlayer extends Component {
       .catch(this.handleError);
   }
 
-  handleSuccess = () => {
-    console.log('yes!')
+  handleSuccess = (stream) => {
+    const videoTracks = stream.getVideoTracks();
+    window.stream = stream; // make variable available to browser console
+    this.video.srcObject = stream;
   };
 
-  handleError = () => {};
+  handleError = (error) => {
+    console.log(error)
+  };
 
   render() {
     return (
       <div>
-        <div>Live Stream</div>
-        {/* <Video
-          source={{ uri: "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4" }} // Can be a URL or a local file.
-          ref={ref => {
-            this.player = ref;
-          }} // Store reference
-          onBuffer={this.onBuffer} // Callback when remote video is buffering
-          onEnd={this.onEnd} // Callback when playback finishes
-          onError={this.videoError} // Callback when video cannot be loaded
-        /> */}
+        <Header style={{textAlign: 'center'}}>Live Stream</Header>
+        <Container fluid>
+        <video
+          ref={(video) => { this.video = video; }}
+          autoPlay
+          playsInline
+          style={{
+            padding: '1em',
+            borderRadius: 8
+          }}
+        ></video>
+        </Container>
       </div>
     );
   }

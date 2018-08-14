@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import { Input, Button } from 'semantic-ui-react';
 export default class SendMessageForm extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +25,8 @@ export default class SendMessageForm extends Component {
     return (
       <form onSubmit={this.postMessage}>
         <label>
-          <input
+          <Input
+            fluid
             type="text"
             placeholder="Type your message and click enter.."
             name="message"
@@ -33,7 +34,7 @@ export default class SendMessageForm extends Component {
             value={this.state.message}
           />
         </label>
-        <input type="submit" value="Submit" />
+        {/* <Button type="submit" value="Submit">Submit</Button> */}
       </form>
     );
   }

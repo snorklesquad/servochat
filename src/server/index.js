@@ -12,12 +12,16 @@ const messages = [
   }
 ];
 var users = [];
+var votes = {};
+var queries = [];
 
 io.on('connection', socket => {
   console.log('user connected: ', socket.id);
   socket.emit('receive_id', socket.id);
   io.emit('receive_message', messages); 
   io.emit('receive_user', users); 
+  io.emit('receive_query', queries);
+  io.emit('receive_votes', votes);
 
   socket.on('send_message', data => {
     messages.push(data);
@@ -28,6 +32,24 @@ io.on('connection', socket => {
     users.push(data);
     io.emit('receive_user', users); 
   });
+
+  socket.on('send_query', data => {
+    queries.push(data);
+    io.emit('receive_query', queries);
+  })
+
+  socket.on('cast_vote', data => {
+    if (votes[data.i]) {
+      votes[data.i].count++;
+    } else {
+      votes[data.i] = {
+        q: data.q,
+        id: data.i,
+        count: 1
+      }
+    }
+    io.emit('receive_vote', votes);
+  })
 
   socket.on('disconnect', () => {
     io.emit('disconnect_user', socket.id);
