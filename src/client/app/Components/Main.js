@@ -16,7 +16,9 @@ class Main extends Component {
       streaming: false,
       users: [],
       messages: [],
-      queries: []
+      queries: [],
+      votes: [],
+      winningVote: null
     };
     this.verifyUser = this.verifyUser.bind(this);
     this.castVote = this.castVote.bind(this);
@@ -28,41 +30,30 @@ class Main extends Component {
     this.socket.on("disconnect_user", data => this.disconnectUser(data));
     this.socket.on('receive_vote', data => this.addVote(data));
     this.socket.on('receive_query', data => this.addQuery(data));
+    this.socket.on('winning_query', data => this.addWinner(data));
   }
 
   componentDidMount() {}
 
-  addSocketID = data => {
-    this.setState({ socketID: data });
-  };
+  addSocketID = data => { this.setState({ socketID: data }); };
 
-  addMessage = data => {
-    this.setState({ messages: data });
-  };
+  addMessage = data => { this.setState({ messages: data }); };
 
-  addUser = data => {
-    this.setState({
-      users: data
-    });
-  };
+  addUser = data => { this.setState({ users: data }); };
 
-  addQuery = data => {
-    this.setState({queries: data});
-  }
+  addQuery = data => { this.setState({queries: data}); };
 
-  addVote = data => {
-    this.setState({
-      votes: data
-    })
-  }
+  addVote = data => { this.setState({ votes: data }); };
 
-  sendQuery = query => {
-    this.socket.emit('send_query', query);
-  }
+  addWinner = data => { this.setState({ winningVote: data }); };
 
-  castVote = vote => {
-    this.socket.emit('cast_vote', vote);
-  }
+  sendQuery = query => { this.socket.emit('send_query', query); };
+
+  castVote = vote => { this.socket.emit('cast_vote', vote); };
+
+  tallyVotes = data => { this.socket.emit('tally_votes'); };
+
+  sendMessage = msg => { this.socket.emit("send_message", msg); };
 
   verifyUser = name => {
     this.socket.emit("send_user", {
@@ -72,15 +63,7 @@ class Main extends Component {
     this.setState({ name, verified: true });
   };
 
-  disconnectUser = data => {
-    this.setState({
-      users: this.state.users.filter(user => user.socket !== data)
-    });
-  };
-
-  sendMessage = msg => {
-    this.socket.emit("send_message", msg);
-  };
+  disconnectUser = data => { this.setState({ users: data }); };
 
   render() {
     return (
@@ -94,7 +77,7 @@ class Main extends Component {
             {this.state.streaming && 
             <Segment className="game">
               <VideoPlayer />
-              <QueryGame sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name}/>
+              <QueryGame winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name}/>
             </Segment>
             }
             {!this.state.streaming && (

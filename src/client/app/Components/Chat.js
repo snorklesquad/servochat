@@ -25,7 +25,7 @@ export default class Chat extends Component {
   render() {
     return (
       <div className="room">
-        <Header>Chatroom</Header>
+        <Header style={{textAlign: 'center'}}>Chatroom</Header>
         <MessagesList messages={this.props.messages} />
         <SendMessageForm user={this.props.name} submit={this.postMessage} />
       </div>

@@ -12,7 +12,9 @@ export default class Splash extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.verifyUser(this.state.name);
+    if (this.state.name) {
+      this.props.verifyUser(this.state.name);
+    }
   }
 
   render() {

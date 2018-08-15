@@ -51,9 +51,17 @@ io.on('connection', socket => {
     io.emit('receive_vote', votes);
   })
 
+  socket.on('tally_votes', () => {
+    let sortedVotes = Object.keys(votes).sort((a, b) => votes[b].count - votes[a].count);
+    let winner = sortedVotes[0];
+    io.emit('winning_query', votes[winner]);
+    votes = [];
+    queries = [];
+  })
+
   socket.on('disconnect', () => {
-    io.emit('disconnect_user', socket.id);
     users.splice(users.indexOf(socket));
+    io.emit('disconnect_user', users);
     console.log('user disconnected: ', socket.id);
   });
 });

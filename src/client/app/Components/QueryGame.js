@@ -9,6 +9,8 @@ import {
   Segment,
   Label
 } from "semantic-ui-react";
+import Timer from "./Timer";
+import UserQuestions from "./UserQuestions";
 
 export default class QueryGame extends Component {
   constructor() {
@@ -17,7 +19,8 @@ export default class QueryGame extends Component {
       message: "",
       questions: [],
       questionAsked: false,
-      voteCast: false
+      voteCast: false,
+      votesTallied: false
     };
     this.castVote = this.castVote.bind(this);
     this.sendQuery = this.sendQuery.bind(this);
@@ -34,93 +37,86 @@ export default class QueryGame extends Component {
     }
   }
 
-  castVote(blob) {
-    this.props.castVote(blob);
+  castVote(vote) {
+    this.props.castVote(vote);
+    this.setState({ voteCast: true });
   }
 
   render() {
     return (
       <div>
         <Segment>
-          {!this.state.voteCast && (
-            <div>
-              <Header style={{ textAlign: "center" }}>
-                Questions for Tony
-              </Header>
-              {!this.props.queries.length && (
-                <div>
-                  No questions have been asked yet. Feel free to submit a
-                  question for Tony in the form below!
-                </div>
-              )}
-              <Item.Group>
-                {this.props.queries &&
-                  this.props.queries.map((q, i) => (
-                    <Item key={i}>
-                      <Item.Content verticalAlign="middle">
-                        <strong>{q.question}</strong>
-                        <Button
-                          color="red"
-                          floated="right"
-                          as="div"
-                          labelPosition="right"
-                        >
-                          <Button
-                            onClick={() =>
-                              this.setState({ voteCast: true }, () =>
-                                this.castVote({ q, i })
-                              )
-                            }
-                            color="red"
-                            icon
-                          >
-                            <Icon name="heart" />
-                            Vote
-                          </Button>
-                        </Button>
+          <Timer tallyVotes={this.props.tallyVotes} />
 
-                        <Item.Extra>Asked by {q.user}</Item.Extra>
-                      </Item.Content>
-                    </Item>
-                  ))}
-              </Item.Group>
-            </div>
-          )}
-
-          {this.state.voteCast && (
-            //show number of votes here
+          {this.props.winningVote && (
             <div>
-              <Header style={{ textAlign: "center" }}>Vote Results</Header>
-              <Item.Group>
-                {this.props.votes &&
-                  Object.keys(this.props.votes).map((key, i) => (
-                    <Item.Content key={i}>
-                      <strong>{this.props.votes[key].q.question}</strong>
-                      <span style={{ float: "right" }}>
-                      <Icon name="heart" />{this.props.votes[key].count}
+              <Item>
+                <Item.Content>
+                  <Item.Header style={{fontSize: '1.5em', textAlign: 'center', margin: '1em auto'}}>The winning question was:</Item.Header>
+                  <Item.Description style={{margin: '0 auto'}}>
+                    <p>
+                      <strong style={{fontSize: '1.1em'}}>{this.props.winningVote.q.question}</strong>
+                      
+                    </p>
+                    <p>Asked by {this.props.winningVote.q.user}
+                    <span style={{ float: "right" }}>
+                        <Icon name="heart" color="red" />
+                        {this.props.winningVote.count}
                       </span>
-                    </Item.Content>
-                  ))}
-              </Item.Group>
+                    </p>
+                  </Item.Description>
+                </Item.Content>
+              </Item>
             </div>
           )}
+
+          {!this.props.winningVote && (
+            <UserQuestions
+              castVote={this.castVote}
+              queries={this.props.queries}
+            />
+          )}
+
+          {this.state.voteCast &&
+            !this.props.winningVote && (
+              //show number of votes here
+              <div>
+                <Header style={{ textAlign: "center" }}>Vote Results</Header>
+                <Item.Group>
+                  {this.props.votes &&
+                    Object.keys(this.props.votes).map((key, i) => (
+                      <Item.Content key={i}>
+                        <strong>{this.props.votes[key].q.question}</strong>
+                        <span style={{ float: "right" }}>
+                          <Icon name="heart" color="red" />
+                          {this.props.votes[key].count}
+                        </span>
+                        <Item.Extra>
+                          Asked by {this.props.votes[key].q.user}
+                        </Item.Extra>
+                      </Item.Content>
+                    ))}
+                </Item.Group>
+              </div>
+            )}
         </Segment>
 
-        {this.props.queries.length <= 7 && !this.state.voteCast && (
-          <Form onSubmit={this.sendQuery}>
-            <label>
-              What would you like to ask our bot?
-              <Input
-                fluid
-                type="text"
-                placeholder="Type your message and click enter.."
-                name="message"
-                onChange={e => this.setState({ message: e.target.value })}
-                value={this.state.message}
-              />
-            </label>
-          </Form>
-        )}
+        {this.props.queries.length <= 7 &&
+          !this.state.voteCast && (
+            <Form onSubmit={this.sendQuery}>
+              <label>
+                What would you like to ask our bot?
+                <Input
+                  fluid
+                  type="text"
+                  placeholder="Type your message and click enter.."
+                  name="message"
+                  onChange={e => this.setState({ message: e.target.value })}
+                  value={this.state.message}
+                />
+              </label>
+            </Form>
+          )}
       </div>
     );
   }
