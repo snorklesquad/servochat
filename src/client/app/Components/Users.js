@@ -7,7 +7,7 @@ const Users = props => (
     {props.users.map((user, i) => {
       return (
         <div key={i}>
-          <div>{user.username}</div>
+          <div style={{fontSize: '1.1em'}}>{user.username}</div>
         </div>
       );
     })}

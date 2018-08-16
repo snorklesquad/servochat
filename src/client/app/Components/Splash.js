@@ -40,7 +40,7 @@ export default class Splash extends React.Component {
                   </label>
                 </Form.Field>
                 <Form.Field>
-                  <Button fluid type="submit" value="Submit">
+                  <Button fluid type="submit" value="Submit" primary>
                     Submit
                   </Button>
                 </Form.Field>

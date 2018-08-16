@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import {Button, Header} from 'semantic-ui-react';
 export default class Timer extends Component {
   constructor(props) {
     super(props);
@@ -65,12 +65,15 @@ export default class Timer extends Component {
 
   render() {
     return (
-      <div>
-        <button onClick={this.startTimer}>Start</button>
+      <div style={{textAlign: 'center'}}>
+        {this.props.auth &&
+          <Button onClick={this.startTimer}>Start Timer</Button>        
+        }
+        
         {this.state.timerDisplay && (
-          <div>
-            Time remaining this round: {this.state.time.m}: {this.state.time.s}
-          </div>
+          <Header>
+            Time remaining this round: {this.state.time.s} seconds
+          </Header>
         )}
       </div>
     );

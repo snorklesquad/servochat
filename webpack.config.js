@@ -8,7 +8,8 @@ var config = {
   entry: APP_DIR + "/index.js",
   output: {
     path: BUILD_DIR,
-    filename: "bundle.js"
+    filename: "bundle.js",
+    publicPath: '/'
   },
   module: {
     rules: [
@@ -22,7 +23,10 @@ var config = {
         loader: "style-loader!css-loader" 
       }
     ]
-  }
+  },
+  devServer: {
+    historyApiFallback: true,
+  },
 };
 
 module.exports = config;

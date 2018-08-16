@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 const http = require('http').Server(app);
 const io = module.exports.io = require('socket.io')(http);
+app.use(bodyParser.json());
 
 const messages = [
   {
@@ -14,6 +15,7 @@ const messages = [
 var users = [];
 var votes = {};
 var queries = [];
+var winner = null;
 
 io.on('connection', socket => {
   console.log('user connected: ', socket.id);
@@ -22,6 +24,7 @@ io.on('connection', socket => {
   io.emit('receive_user', users); 
   io.emit('receive_query', queries);
   io.emit('receive_votes', votes);
+  io.emit('winning_query', winner);
 
   socket.on('send_message', data => {
     messages.push(data);
@@ -53,10 +56,23 @@ io.on('connection', socket => {
 
   socket.on('tally_votes', () => {
     let sortedVotes = Object.keys(votes).sort((a, b) => votes[b].count - votes[a].count);
-    let winner = sortedVotes[0];
-    io.emit('winning_query', votes[winner]);
+    console.log(sortedVotes);
+    let winningVote = sortedVotes[0];
+    winner = votes[winningVote];
+    io.emit('winning_query', winner);
     votes = [];
     queries = [];
+    io.emit('receive_query', queries);
+    io.emit('receive_vote', votes);
+  })
+
+  socket.on('reset_game', () => {
+    winner = null;
+    votes = [];
+    queries = [];
+    io.emit('receive_query', queries);
+    io.emit('receive_vote', votes);
+    io.emit('winning_query', winner);
   })
 
   socket.on('disconnect', () => {
@@ -68,8 +84,16 @@ io.on('connection', socket => {
 
 app.use(express.static(path.join(__dirname, '../client/')))
 
+app.post('/auth', (req, res) => {
+  if (req.body.pass === 'irobot') {
+    res.send({result: true});
+  } else {
+    res.send({result: false})
+  }
+})
+
 app.get('*', (req, res) => {
-  res.redirect('/');
+  res.sendFile(path.resolve(__dirname, '../client/index.html'));
 });
 
 http.listen(process.env.PORT || 8080, () => console.log('on 8080'));

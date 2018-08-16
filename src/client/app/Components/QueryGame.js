@@ -19,8 +19,7 @@ export default class QueryGame extends Component {
       message: "",
       questions: [],
       questionAsked: false,
-      voteCast: false,
-      votesTallied: false
+      voteCast: false
     };
     this.castVote = this.castVote.bind(this);
     this.sendQuery = this.sendQuery.bind(this);
@@ -45,22 +44,22 @@ export default class QueryGame extends Component {
   render() {
     return (
       <div>
-        <Segment>
-          <Timer tallyVotes={this.props.tallyVotes} />
-
+        <div style={{
+          margin: '1rem 0',
+          padding: '1em'
+        }}>
           {this.props.winningVote && (
             <div>
               <Item>
                 <Item.Content>
-                  <Item.Header style={{fontSize: '1.5em', textAlign: 'center', margin: '1em auto'}}>The winning question was:</Item.Header>
-                  <Item.Description style={{margin: '0 auto'}}>
-                    <p>
-                      <strong style={{fontSize: '1.1em'}}>{this.props.winningVote.q.question}</strong>
-                      
+                  <div style={{fontSize: '1.5em', textAlign: 'center', margin: '0.5em auto'}}>The winning question was:</div>
+                  <Item.Description style={{margin: '1.5em auto'}}>
+                    <p style={{fontSize: '1.1em', textAlign: 'center', paddingTop: '1.5em'}}>
+                      <strong >{this.props.winningVote.q.question}</strong>
                     </p>
-                    <p>Asked by {this.props.winningVote.q.user}
-                    <span style={{ float: "right" }}>
-                        <Icon name="heart" color="red" />
+                    <p style={{textAlign: 'center'}}>Asked by {this.props.winningVote.q.user}
+                    <span>
+                        <Icon name="heart" style={{marginLeft: '1em'}} color="red" />
                         {this.props.winningVote.count}
                       </span>
                     </p>
@@ -99,7 +98,7 @@ export default class QueryGame extends Component {
                 </Item.Group>
               </div>
             )}
-        </Segment>
+        </div>
 
         {this.props.queries.length <= 7 &&
           !this.state.voteCast && (
@@ -117,6 +116,9 @@ export default class QueryGame extends Component {
               </label>
             </Form>
           )}
+
+        <Timer auth={this.props.auth} tallyVotes={this.props.tallyVotes} />
+
       </div>
     );
   }

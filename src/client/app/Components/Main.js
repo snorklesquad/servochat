@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { Button, Container, Input, Modal, Form, Grid, Segment } from "semantic-ui-react";
+import { Button, Container, Segment, Menu } from "semantic-ui-react";
 import Splash from "./Splash";
 import Chat from "./Chat";
 import VideoPlayer from "./VideoPlayer";
@@ -33,7 +33,11 @@ class Main extends Component {
     this.socket.on('winning_query', data => this.addWinner(data));
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    if (this.props.auth) {
+      this.verifyUser('tony_bot');
+    }
+  }
 
   addSocketID = data => { this.setState({ socketID: data }); };
 
@@ -53,6 +57,8 @@ class Main extends Component {
 
   tallyVotes = data => { this.socket.emit('tally_votes'); };
 
+  resetGame = data => { this.socket.emit('reset_game'); };
+
   sendMessage = msg => { this.socket.emit("send_message", msg); };
 
   verifyUser = name => {
@@ -67,42 +73,57 @@ class Main extends Component {
 
   render() {
     return (
-      <Container style={{marginTop: 30}}>
-        {!this.state.verified && <Splash verifyUser={this.verifyUser} />}
-        {this.state.verified && (
-          <div>
-            <div>
-              <h1>ServoChat</h1>
-            </div>
-            {this.state.streaming && 
-            <Segment className="game">
-              <VideoPlayer />
-              <QueryGame winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name}/>
-            </Segment>
-            }
-            {!this.state.streaming && (
-              <Button
-                onClick={() => this.setState({ streaming: true })}
-                title="Watch the Livestream"
-              >
-                Watch the Livestream
-              </Button>
-            )}
-            <Segment className="chat">
-            <Users users={this.state.users} />
-            <Chat
-              messages={this.state.messages}
-              sendMessage={this.sendMessage}
-              name={this.state.name}
-            />
-            </Segment>
-            <div>What would you like to ask our bot?</div>
-            <Button onClick={() => {}} color="primary" title="Tip the Robot.">
-              Tip the Robot.
+      <div>
+        {this.props.auth &&
+          <Menu>
+            <Button onClick={this.resetGame} basic primary>
+              Reset the Game.
             </Button>
-          </div>
-        )}
-      </Container>
+          </Menu>
+        }
+        <Container style={{ marginTop: 30 }}>
+          {!this.state.verified && <Splash verifyUser={this.verifyUser} />}
+          {this.state.verified && (
+            <div>
+              <div>
+                <h1>ServoChat</h1>
+              </div>
+              {this.state.streaming &&
+                <Segment className="game">
+                  <VideoPlayer />
+                  <QueryGame auth={this.props.auth} winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name} />
+                </Segment>
+              }
+              {!this.state.streaming && (
+                <div
+                  style={{ textAlign: 'center' }}>
+                  <Button
+                    onClick={() => this.setState({ streaming: true })}
+                    title="Watch the Livestream"
+                    primary
+                    size="big"
+                  >
+                    Join the Game
+                  </Button>
+                </div>
+              )}
+              <Segment className="chat">
+                <Users users={this.state.users} />
+                <Chat
+                  messages={this.state.messages}
+                  sendMessage={this.sendMessage}
+                  name={this.state.name}
+                />
+              </Segment>
+              <div style={{ textAlign: 'right' }}>
+                <Button onClick={() => { }} basic primary title="Tip the Robot.">
+                  Tip the Robot.
+                </Button>
+              </div>
+            </div>
+          )}
+        </Container>
+      </div>
     );
   }
 }

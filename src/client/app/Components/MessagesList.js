@@ -2,7 +2,7 @@ import React from "react";
 import {Comment, Container} from 'semantic-ui-react';
 
 const MessageList = props => (
-  <Comment.Group>
+  <Comment.Group style={{padding: '0 1em'}}>
     {props.messages.map((message, i) => {
       return (
         <Comment key={i}>
