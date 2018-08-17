@@ -1,11 +1,7 @@
 import React, { Component } from "react";
 import {
   Container,
-  Segment,
-  Header,
   Icon,
-  Loader,
-  Dimmer
 } from "semantic-ui-react";
 export default class VideoPlayer extends Component {
   constructor(props) {
@@ -27,7 +23,7 @@ export default class VideoPlayer extends Component {
 
   handleSuccess = stream => {
     const videoTracks = stream.getVideoTracks();
-    window.stream = stream; // make variable available to browser console
+    window.stream = stream;
     this.video.srcObject = stream;
   };
 
@@ -38,7 +34,7 @@ export default class VideoPlayer extends Component {
   render() {
     return (
       <div>
-        <Header textAlign="center">Live Stream</Header>
+        {/* <Header textAlign="center">Live Stream</Header> */}
         <Container fluid>
           {!this.state.currentlyStreaming && (
             <div>

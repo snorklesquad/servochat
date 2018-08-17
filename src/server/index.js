@@ -45,7 +45,6 @@ const tallyVotes = () => {
   let sortedVotes = Object.keys(votes).sort(
     (a, b) => votes[b].count - votes[a].count
   );
-  console.log(sortedVotes);
   let winningVote = sortedVotes[0];
   winner = votes[winningVote];
   io.emit("winning_query", winner);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import {Header, Item, Button, Icon} from 'semantic-ui-react'
+import { Header, Item, Button, Icon } from "semantic-ui-react";
 
 export default class UserQuestions extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ export default class UserQuestions extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ padding: "0 1em" }}>
         <Header style={{ textAlign: "center" }}>Questions for Tony</Header>
         {!this.props.queries.length && (
           <div>

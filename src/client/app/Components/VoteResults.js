@@ -6,7 +6,8 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend
+  Legend,
+  ResponsiveContainer
 } from "recharts";
 import {Header} from 'semantic-ui-react';
 
@@ -23,10 +24,10 @@ export default class VoteResults extends Component {
     return (
       <div>
       <Header style={{ textAlign: "center" }}>Vote Results</Header>
-        <BarChart layout="vertical" barCategoryGap={1} width={630} height={250} data={data}>
-          <CartesianGrid/>
-          <XAxis type="number" />
-          <YAxis type="category" dataKey="question" width={150} padding={{ left: 20 }} />
+        <BarChart layout="vertical" barCategoryGap={1} width={400} height={400} data={data}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis type="number"/>
+          <YAxis type="category" dataKey="question" width={80} padding={{ left: 20 }} />
           <Tooltip />
           <Bar dataKey="count" fill="#1678c2" />
         </BarChart>
