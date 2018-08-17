@@ -14,10 +14,12 @@
 .users {
   border: 1px solid rgba(34,36,38,.15);
   padding: 1em;
+  overflow: auto;
 }
 
-
 .room {
-  /* border: 1px solid rgba(34,36,38,.15); */
   padding: 1em;
+  max-height: 600px;
+  overflow: auto;
+  margin-bottom: 1em;
 }

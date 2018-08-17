@@ -18,12 +18,21 @@ class Main extends Component {
       messages: [],
       queries: [],
       votes: [],
-      winningVote: null
+      winningVote: null,
+      voteCast: false
     };
     this.verifyUser = this.verifyUser.bind(this);
     this.castVote = this.castVote.bind(this);
     this.sendQuery = this.sendQuery.bind(this);
-    this.socket = io("http://localhost:8080");
+    this.startTimer = this.startTimer.bind(this);
+    this.socket = io("http://localhost:8080", {
+      transports: ['websocket'], 
+      upgrade: false,
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 99999
+    });
     this.socket.on("receive_message", data => this.addMessage(data));
     this.socket.on("receive_user", data => this.addUser(data));
     this.socket.on("receive_id", data => this.addSocketID(data));
@@ -31,6 +40,8 @@ class Main extends Component {
     this.socket.on('receive_vote', data => this.addVote(data));
     this.socket.on('receive_query', data => this.addQuery(data));
     this.socket.on('winning_query', data => this.addWinner(data));
+    this.socket.on('receive_time', data => this.setTime(data));
+    this.socket.on('game_reset', data => this.setState({voteCast: false}));
   }
 
   componentDidMount() {
@@ -51,13 +62,20 @@ class Main extends Component {
 
   addWinner = data => { this.setState({ winningVote: data }); };
 
-  sendQuery = query => { this.socket.emit('send_query', query); };
+  setTime = time => { this.setState({ time }); };
 
-  castVote = vote => { this.socket.emit('cast_vote', vote); };
+  castVote = vote => { 
+    this.socket.emit('cast_vote', vote);
+    this.setState({voteCast: true}); 
+  };
 
   tallyVotes = data => { this.socket.emit('tally_votes'); };
 
   resetGame = data => { this.socket.emit('reset_game'); };
+
+  sendQuery = query => { this.socket.emit('send_query', query); };
+
+  startTimer = time => { this.socket.emit('start_timer'); };
 
   sendMessage = msg => { this.socket.emit("send_message", msg); };
 
@@ -76,6 +94,7 @@ class Main extends Component {
       <div>
         {this.props.auth &&
           <Menu>
+            <Button onClick={this.startTimer} basic primary>Start Timer</Button>        
             <Button onClick={this.resetGame} basic primary>
               Reset the Game.
             </Button>
@@ -91,7 +110,7 @@ class Main extends Component {
               {this.state.streaming &&
                 <Segment className="game">
                   <VideoPlayer />
-                  <QueryGame auth={this.props.auth} winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name} />
+                  <QueryGame voteCast={this.state.voteCast} time={this.state.time} auth={this.props.auth} winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name} />
                 </Segment>
               }
               {!this.state.streaming && (

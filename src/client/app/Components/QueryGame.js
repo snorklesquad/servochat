@@ -11,6 +11,8 @@ import {
 } from "semantic-ui-react";
 import Timer from "./Timer";
 import UserQuestions from "./UserQuestions";
+import VoteResults from './VoteResults';
+import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend} from 'recharts';
 
 export default class QueryGame extends Component {
   constructor() {
@@ -19,7 +21,6 @@ export default class QueryGame extends Component {
       message: "",
       questions: [],
       questionAsked: false,
-      voteCast: false
     };
     this.castVote = this.castVote.bind(this);
     this.sendQuery = this.sendQuery.bind(this);
@@ -38,10 +39,10 @@ export default class QueryGame extends Component {
 
   castVote(vote) {
     this.props.castVote(vote);
-    this.setState({ voteCast: true });
   }
 
   render() {
+    const votesArray = Object.values(this.props.votes);
     return (
       <div>
         <div style={{
@@ -55,9 +56,9 @@ export default class QueryGame extends Component {
                   <div style={{fontSize: '1.5em', textAlign: 'center', margin: '0.5em auto'}}>The winning question was:</div>
                   <Item.Description style={{margin: '1.5em auto'}}>
                     <p style={{fontSize: '1.1em', textAlign: 'center', paddingTop: '1.5em'}}>
-                      <strong >{this.props.winningVote.q.question}</strong>
+                      <strong >{this.props.winningVote.question}</strong>
                     </p>
-                    <p style={{textAlign: 'center'}}>Asked by {this.props.winningVote.q.user}
+                    <p style={{textAlign: 'center'}}>Asked by {this.props.winningVote.user}
                     <span>
                         <Icon name="heart" style={{marginLeft: '1em'}} color="red" />
                         {this.props.winningVote.count}
@@ -76,7 +77,7 @@ export default class QueryGame extends Component {
             />
           )}
 
-          {this.state.voteCast &&
+          {/* {this.props.voteCast && this.props.queries.length > 0 && 
             !this.props.winningVote && (
               //show number of votes here
               <div>
@@ -84,7 +85,8 @@ export default class QueryGame extends Component {
                 <Item.Group>
                   {this.props.votes &&
                     Object.keys(this.props.votes).map((key, i) => (
-                      <Item.Content key={i}>
+                      <Item key={i}>
+                      <Item.Content>
                         <strong>{this.props.votes[key].q.question}</strong>
                         <span style={{ float: "right" }}>
                           <Icon name="heart" color="red" />
@@ -94,14 +96,20 @@ export default class QueryGame extends Component {
                           Asked by {this.props.votes[key].q.user}
                         </Item.Extra>
                       </Item.Content>
+                      </Item>
                     ))}
                 </Item.Group>
               </div>
-            )}
+            )} */}
+            {this.props.voteCast && this.props.queries.length > 0 && 
+            !this.props.winningVote && (
+              <VoteResults votes={this.props.votes} />
+            )
+            }
         </div>
 
         {this.props.queries.length <= 7 &&
-          !this.state.voteCast && (
+          !this.props.voteCast && (
             <Form onSubmit={this.sendQuery}>
               <label>
                 What would you like to ask our bot?
@@ -117,7 +125,7 @@ export default class QueryGame extends Component {
             </Form>
           )}
 
-        <Timer auth={this.props.auth} tallyVotes={this.props.tallyVotes} />
+        <Timer time={this.props.time} auth={this.props.auth} tallyVotes={this.props.tallyVotes} />
 
       </div>
     );

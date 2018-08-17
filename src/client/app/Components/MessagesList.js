@@ -2,6 +2,7 @@ import React from "react";
 import {Comment, Container} from 'semantic-ui-react';
 
 const MessageList = props => (
+  <div className="room">
   <Comment.Group style={{padding: '0 1em'}}>
     {props.messages.map((message, i) => {
       return (
@@ -14,6 +15,7 @@ const MessageList = props => (
       );
     })}
   </Comment.Group>
+  </div>
 );
 
 export default MessageList;
