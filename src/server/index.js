@@ -18,7 +18,10 @@ const messages = [
     text: "Hello and welcome to the chat!"
   }
 ];
-var users = [];
+var users = [
+  {username: 'markov_bot', socket: null},
+  {username: 'reddit_bot', socket: null}
+]; 
 var votes = {};
 var queries = [];
 var winner = null;
@@ -50,12 +53,25 @@ const tallyVotes = () => {
   );
   let winningVote = sortedVotes[0];
   winner = votes[winningVote];
+  sendBotMessageToggle(winner);
   io.emit("winning_query", winner);
   votes = [];
   queries = [];
   io.emit("receive_query", queries);
   io.emit("receive_vote", votes);
 };
+
+const sendBotMessageToggle = (data) => {
+  if (Math.random() > 0.5) {
+    redditor(data).then((response)=>{
+      messages.push({username: 'redditor_bot', text: response})
+      setTimeout(() => io.emit("receive_message", messages), 1000);
+    })
+  } else {
+    messages.push({username: 'markov_bot', text: markov(10)})
+    setTimeout(() => io.emit("receive_message", messages), 1000);
+  }
+}
 
 // io.set('transports', ['websocket']);
 io.on("connection", socket => {
@@ -70,16 +86,9 @@ io.on("connection", socket => {
   io.emit("winning_query", winner);
 
   socket.on("send_message", data => {
-    messages.push(data)
-    if (Math.random() > 0.5) {
-      redditor(data).then((response)=>{
-        messages.push({username: 'redditor', text: response})
-        io.emit("receive_message", messages)
-      })
-    } else {
-      messages.push({username: 'markov', text: markov(10)})
-      io.emit("receive_message", messages)
-    }
+    messages.push(data);
+    io.emit('receive_message', messages);
+    sendBotMessageToggle(data.text);
   });
 
   socket.on("send_user", data => {
@@ -93,7 +102,7 @@ io.on("connection", socket => {
   });
 
   socket.on("start_timer", data => {
-    time = 5;
+    time = 60;
     startTimer();
   });
 
@@ -108,7 +117,6 @@ io.on("connection", socket => {
         count: 1
       };
     }
-    console.log(votes);
     io.emit("receive_vote", Object.values(votes));
   });
 
@@ -116,7 +124,6 @@ io.on("connection", socket => {
     let sortedVotes = Object.keys(votes).sort(
       (a, b) => votes[b].count - votes[a].count
     );
-    console.log(sortedVotes);
     let winningVote = sortedVotes[0];
     winner = votes[winningVote];
     io.emit("winning_query", winner);
