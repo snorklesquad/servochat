@@ -28,8 +28,9 @@ const redditor = (query) => {query = qs.stringify({q: query}); console.log(query
       .split('  ').join(' ')))
   .then((text) =>
       function getResponse(text) {
+        if (text === undefined) return;
         let response = text[Math.floor(Math.random() * text.length) + 1]
-        if (response.length > 0) {
+        if (response && response.length > 0) {
           return response
         } else {
           return getResponse()
