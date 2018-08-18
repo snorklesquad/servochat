@@ -27,8 +27,17 @@ const redditor = (query) => {query = qs.stringify({q: query}); console.log(query
       .split('\\').join('')
       .split('  ').join(' ')))
   .then((text) =>
-    text[Math.floor(Math.random() * text.length) + 1]
+      function getResponse(text) {
+        let response = text[Math.floor(Math.random() * text.length) + 1]
+        if (response.length > 0) {
+          return response
+        } else {
+          return getResponse()
+        }
+      }(text)
+    
   )
+
 }
 
 module.exports.redditor = redditor

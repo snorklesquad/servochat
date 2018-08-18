@@ -44,14 +44,13 @@ const sentenceGen = (length) => {
   let result = [],
       findStarter = () => {
         let temp = wordGen();
-        console.log(biFreq[temp])
-        return biFreq[temp] ? (biFreq[temp].length > 0 ? temp : findStarter()) : findStarter()
+        return triFreq[temp] ? (triFreq[temp].length > 0 ? temp : findStarter()) : findStarter()
       }
       starter = findStarter();
 
   result.push(starter)
   while (length > 0) {
-    let wordPairs = biFreq[starter],
+    let wordPairs = triFreq[starter],
         pickedPair = wordPairs[Math.floor(Math.random() * wordPairs.length)],
         probability = function(array, pair) {
           if (!array) {
