@@ -7,6 +7,9 @@ const io = (module.exports.io = require("socket.io")(http, {
   pingInterval: 100000,
   pingTimeout: 500000
 }));
+const { markov } = require('./responseGenerator/markov')
+const { redditor } = require('./responseGenerator/redditor')
+
 app.use(bodyParser.json());
 
 const messages = [
@@ -67,8 +70,16 @@ io.on("connection", socket => {
   io.emit("winning_query", winner);
 
   socket.on("send_message", data => {
-    messages.push(data);
-    io.emit("receive_message", messages);
+    messages.push(data)
+    if (Math.random() > 0.5) {
+      redditor(data).then((response)=>{
+        messages.push({username: 'redditor', text: response})
+        io.emit("receive_message", messages)
+      })
+    } else {
+      messages.push({username: 'markov', text: markov(10)})
+      io.emit("receive_message", messages)
+    }
   });
 
   socket.on("send_user", data => {
@@ -144,6 +155,14 @@ app.post("/auth", (req, res) => {
     res.send({ result: false });
   }
 });
+
+app.post("/markov", (req, res) => {
+  res.send(markov(10))
+})
+
+app.post("/redditor", (req, res) => {
+  redditor(req.body.query).then((response)=>{res.send(response)})
+})
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/index.html"));
