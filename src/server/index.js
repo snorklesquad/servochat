@@ -62,9 +62,9 @@ const tallyVotes = () => {
 };
 
 const sendBotMessageToggle = (data) => {
-  if (Math.random() > 0.5) {
+  if (Math.random() > 0) {
     redditor(data).then((response)=>{
-      if(response === undefined) return sendBotMessageToggle(data);
+      // if(response === undefined) return sendBotMessageToggle(data);
       messages.push({username: 'redditor_bot', text: response})
       setTimeout(() => io.emit("receive_message", messages), 200);
     })
@@ -172,6 +172,7 @@ app.post("/markov", (req, res) => {
 
 app.post("/redditor", (req, res) => {
   redditor(req.body.query).then((response)=>{res.send(response)})
+  // redditor(winner).then((response) => {res.send(response)});
 })
 
 app.get("*", (req, res) => {
