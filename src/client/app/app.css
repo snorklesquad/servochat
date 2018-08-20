@@ -1,0 +1,25 @@
+.game {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1.5em;
+}
+
+.chat {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 1.5em;
+  padding: 1.5em;
+}
+
+.users {
+  border: 1px solid rgba(34,36,38,.15);
+  padding: 1em;
+  overflow: auto;
+}
+
+.room {
+  padding: 1em;
+  max-height: 600px;
+  overflow: auto;
+  margin-bottom: 1em;
+}
