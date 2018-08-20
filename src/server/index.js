@@ -64,16 +64,16 @@ const tallyVotes = () => {
 const sendBotMessageToggle = (data) => {
   if (Math.random() > 0.5) {
     redditor(data).then((response)=>{
+      if(response === undefined) return sendBotMessageToggle(data);
       messages.push({username: 'redditor_bot', text: response})
-      setTimeout(() => io.emit("receive_message", messages), 1000);
+      setTimeout(() => io.emit("receive_message", messages), 200);
     })
   } else {
     messages.push({username: 'markov_bot', text: markov(10)})
-    setTimeout(() => io.emit("receive_message", messages), 1000);
+    setTimeout(() => io.emit("receive_message", messages), 200);
   }
 }
 
-// io.set('transports', ['websocket']);
 io.on("connection", socket => {
   console.log("user connected: ", socket.id);
   socketConnections++;
@@ -88,7 +88,9 @@ io.on("connection", socket => {
   socket.on("send_message", data => {
     messages.push(data);
     io.emit('receive_message', messages);
-    sendBotMessageToggle(data.text);
+    if (Math.random() > 0.25) {
+      sendBotMessageToggle(data.text);
+    }
   });
 
   socket.on("send_user", data => {
@@ -144,9 +146,10 @@ io.on("connection", socket => {
   });
 
   socket.on("disconnect", reason => {
-    console.log(reason);
     socketConnections--;
-    users.splice(users.indexOf(socket));
+    if(users.findIndex(u => u.socket === socket.id) !== -1) {
+      users.splice(users.findIndex(u => u.socket === socket.id), 1);
+    };
     io.emit("disconnect_user", users);
     console.log("user disconnected: ", socket.id);
     console.log("current number of connections: ", socketConnections);
