@@ -1,13 +1,10 @@
 import React, { Component } from "react";
-import {
-  Container,
-  Icon,
-} from "semantic-ui-react";
+import { Container, Icon } from "semantic-ui-react";
 export default class VideoPlayer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentlyStreaming: false
+      currentlyStreaming: true
     };
     this.constraints = {
       audio: false,
@@ -34,7 +31,6 @@ export default class VideoPlayer extends Component {
   render() {
     return (
       <div>
-        {/* <Header textAlign="center">Live Stream</Header> */}
         <Container fluid>
           {!this.state.currentlyStreaming && (
             <div>
@@ -47,7 +43,8 @@ export default class VideoPlayer extends Component {
             </div>
           )}
           {this.state.currentlyStreaming && (
-            <video
+            <div>
+              {/* <video
               ref={video => {
                 this.video = video;
               }}
@@ -57,8 +54,19 @@ export default class VideoPlayer extends Component {
                 padding: "1em",
                 borderRadius: 8
               }}
-            />
+            /> */}
+              <iframe
+                id="ytplayer"
+                type="text/html"
+                width="640"
+                height="360"
+                src="https://youtube.com/embed/Ea-Xb30Ekh4"
+                frameBorder="0"
+              />
+              
+            </div>
           )}
+
         </Container>
       </div>
     );

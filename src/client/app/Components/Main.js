@@ -19,13 +19,14 @@ class Main extends Component {
       queries: [],
       votes: [],
       winningVote: null,
-      voteCast: false
+      voteCast: false,
+      questionAsked: false
     };
     this.verifyUser = this.verifyUser.bind(this);
     this.castVote = this.castVote.bind(this);
     this.sendQuery = this.sendQuery.bind(this);
     this.startTimer = this.startTimer.bind(this);
-    this.socket = io("http://localhost:8080", {
+    this.socket = io({
       transports: ['websocket'], 
       upgrade: false,
       reconnection: true,
@@ -41,7 +42,7 @@ class Main extends Component {
     this.socket.on('receive_query', data => this.addQuery(data));
     this.socket.on('winning_query', data => this.addWinner(data));
     this.socket.on('receive_time', data => this.setTime(data));
-    this.socket.on('game_reset', data => this.setState({voteCast: false}));
+    this.socket.on('game_reset', data => this.setState({voteCast: false, questionAsked: false}));
   }
 
   componentDidMount() {
@@ -73,7 +74,10 @@ class Main extends Component {
 
   resetGame = data => { this.socket.emit('reset_game'); };
 
-  sendQuery = query => { this.socket.emit('send_query', query); };
+  sendQuery = query => { 
+    this.socket.emit('send_query', query);
+    this.setState({questionAsked: true}) 
+  };
 
   startTimer = time => { this.socket.emit('start_timer'); };
 
@@ -110,7 +114,7 @@ class Main extends Component {
               {this.state.streaming &&
                 <Segment className="game">
                   <VideoPlayer />
-                  <QueryGame voteCast={this.state.voteCast} time={this.state.time} auth={this.props.auth} winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name} />
+                  <QueryGame questionAsked={this.state.questionAsked} voteCast={this.state.voteCast} time={this.state.time} auth={this.props.auth} winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name} />
                 </Segment>
               }
               {!this.state.streaming && (
