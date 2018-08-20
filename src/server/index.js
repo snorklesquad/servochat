@@ -62,9 +62,9 @@ const tallyVotes = () => {
 };
 
 const sendBotMessageToggle = (data) => {
-  if (Math.random() > 0.5) {
+  if (Math.random() > 0.0) {
     redditor(data).then((response)=>{
-      if(response === undefined) return sendBotMessageToggle(data);
+      // if(response === undefined) return sendBotMessageToggle(data);
       messages.push({username: 'redditor_bot', text: response})
       setTimeout(() => io.emit("receive_message", messages), 200);
     })
@@ -88,9 +88,9 @@ io.on("connection", socket => {
   socket.on("send_message", data => {
     messages.push(data);
     io.emit('receive_message', messages);
-    if (Math.random() > 0.25) {
+    // if (Math.random() > 0.25) {
       sendBotMessageToggle(data.text);
-    }
+    // }
   });
 
   socket.on("send_user", data => {
@@ -171,7 +171,8 @@ app.post("/markov", (req, res) => {
 })
 
 app.post("/redditor", (req, res) => {
-  redditor(req.body.query).then((response)=>{res.send(response)})
+  // redditor(req.body.query).then((response)=>{res.send(response)})
+  redditor(winner).then((response) => {res.send(response)});
 })
 
 app.get("*", (req, res) => {
