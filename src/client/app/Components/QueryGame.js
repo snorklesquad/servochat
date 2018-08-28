@@ -10,7 +10,6 @@ export default class QueryGame extends Component {
     this.state = {
       message: "",
       questions: [],
-      questionAsked: false
     };
     this.castVote = this.castVote.bind(this);
     this.sendQuery = this.sendQuery.bind(this);
@@ -23,7 +22,7 @@ export default class QueryGame extends Component {
         question: this.state.message,
         user: this.props.user
       });
-      this.setState({ message: "" });
+      this.setState({ questionAsked: true, message: "" });
     }
   }
 
@@ -34,11 +33,7 @@ export default class QueryGame extends Component {
   render() {
     return (
       <div>
-        <div
-          style={{
-            margin: "1rem 0",
-            padding: "1em"
-          }}
+        <div style={{marginTop: '.75em'}}
         >
           {this.props.winningVote && (
             <div>
@@ -94,8 +89,9 @@ export default class QueryGame extends Component {
         </div>
 
         {this.props.queries.length <= 5 &&
-          !this.props.voteCast && (
-            <Form onSubmit={this.sendQuery}>
+          !this.props.voteCast && 
+          !this.props.questionAsked && (
+            <Form onSubmit={this.sendQuery} style={{marginTop: '.7em'}}>
               <label>
                 What would you like to ask our bot?
                 <Input

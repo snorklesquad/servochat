@@ -3,6 +3,7 @@ const Filter = require('bad-words')
 const fs = require('fs')
 const qs = require('querystring')
 const clean = new Filter();
+const {markov} = require('./markov.js');
 
 const redditor = (query) => {query = qs.stringify({q: query}); console.log(query); return request.get(`https://api.pushshift.io/reddit/comment/search/?${query}&html_decode`)
   .then((data)=>JSON.parse(data))
@@ -28,8 +29,9 @@ const redditor = (query) => {query = qs.stringify({q: query}); console.log(query
       .split('  ').join(' ')))
   .then((text) =>
       function getResponse(text) {
+        if (text === undefined) return markov(8);
         let response = text[Math.floor(Math.random() * text.length) + 1]
-        if (response.length > 0 && response.length < 64) {
+        if (response && response.length > 0 && response.length < 64) {
           return response
         } else {
           return getResponse()
