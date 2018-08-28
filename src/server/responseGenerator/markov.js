@@ -3,12 +3,11 @@ const fs = require('fs')
 const Analyzer = natural.SentimentAnalyzer
 const stemmer = natural.PorterStemmer
 const analyzer = new Analyzer('English', stemmer, 'afinn')
-const Pride = fs.readFileSync('./src/server/responseGenerator/data/pride.txt', 'utf8')
+const Pride = fs.readFileSync('./src/server/responseGenerator/data/smallData.txt', 'utf8')
 const NGrams = natural.NGrams
 const tri = NGrams.trigrams(Pride)
 const bi = NGrams.bigrams(Pride)
 const tokenizer = new natural.WordPunctTokenizer()
-
 const pride = Pride.replace(/[^\u0000-\u007F]+/gi, '');
 
 const tokens = tokenizer.tokenize(pride)
