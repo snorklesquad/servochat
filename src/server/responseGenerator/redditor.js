@@ -29,13 +29,13 @@ const redditor = (query) => {query = qs.stringify({q: query}); console.log(query
   .then((text) =>
       function getResponse(text) {
         let response = text[Math.floor(Math.random() * text.length) + 1]
-        if (response.length > 0) {
+        if (response.length > 0 && response.length < 64) {
           return response
         } else {
           return getResponse()
         }
       }(text)
-    
+
   )
 
 }
