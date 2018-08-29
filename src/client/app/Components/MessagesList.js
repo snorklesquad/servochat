@@ -25,18 +25,26 @@ class MessageList extends React.Component {
           this.messageList = div;
         }}
       >
-        <Comment.Group style={{ padding: "0 1em" }}>
+        <div className="comment-group" style={{ padding: "0 1em" }}>
           {this.props.messages.map((message, i) => {
             return (
-              <Comment key={i}>
-                <Comment.Content>
-                  <Comment.Author>{message.username}</Comment.Author>
-                  <Comment.Text>{message.text}</Comment.Text>
-                </Comment.Content>
-              </Comment>
+              <div className="comment" key={i}>
+                <div className="chat-comment">
+                  <span className="chat-item">
+                    {message.img &&
+                      <img width={'35px'} style={{textAlign: 'center'}} src={require("../svg/" + message.img)} />
+                    }
+                  </span>
+                  <span style={{'margin-left': '.75em'}} className="chat-item">
+                    <strong className="comment-author">{message.username}</strong>
+                    <br />
+                    {message.text}
+                  </span>
+                </div>
+              </div>
             );
           })}
-        </Comment.Group>
+        </div>
       </div>
     );
   }

@@ -15,12 +15,13 @@ app.use(bodyParser.json());
 const messages = [
   {
     username: "welcome_bot",
-    text: "Hello and welcome to the chat!"
+    text: "Hello and welcome to the chat!",
+    img: 'robot-10.svg'
   }
 ];
 var users = [
-  {username: 'markov_bot', socket: null},
-  {username: 'reddit_bot', socket: null}
+  {username: 'markov_bot', socket: null, img: 'robot-10.svg'},
+  {username: 'reddit_bot', socket: null, img: 'robot-10.svg'}
 ]; 
 var votes = {};
 var queries = [];
@@ -65,11 +66,11 @@ const sendBotMessageToggle = (data) => {
   if (Math.random() > 0) {
     redditor(data).then((response)=>{
       // if(response === undefined) return sendBotMessageToggle(data);
-      messages.push({username: 'redditor_bot', text: response})
+      messages.push({username: 'redditor_bot', text: response, img: 'robot-10.svg'})
       setTimeout(() => io.emit("receive_message", messages), 200);
     })
   } else {
-    messages.push({username: 'markov_bot', text: markov(10)})
+    messages.push({username: 'markov_bot', text: markov(10), img: 'robot-10.svg'})
     setTimeout(() => io.emit("receive_message", messages), 200);
   }
 }
