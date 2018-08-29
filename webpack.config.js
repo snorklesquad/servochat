@@ -9,7 +9,7 @@ var config = {
   output: {
     path: BUILD_DIR,
     filename: "bundle.js",
-    publicPath: '/'
+    publicPath: "/"
   },
   module: {
     rules: [
@@ -18,15 +18,29 @@ var config = {
         include: APP_DIR,
         loader: "babel-loader"
       },
-      { 
-        test: /\.css$/, 
-        loader: "style-loader!css-loader" 
-      }
+      {
+        test: /\.css$/,
+        loader: "style-loader!css-loader"
+      },
+      { test: /\.(png|jpg)$/, loader: 'url-loader?limit=1118192' },
+      {
+        test: /\.svg$/,
+        use: [
+          {
+            loader: 'svg-url-loader',
+            options: {
+              // Inline files smaller than 10 kB
+              limit: 10 * 1024,
+              noquotes: true,
+            },
+          },
+        ],
+      },
     ]
   },
   devServer: {
-    historyApiFallback: true,
-  },
+    historyApiFallback: true
+  }
 };
 
 module.exports = config;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Button } from 'semantic-ui-react';
+import { Input, Button, Form } from 'semantic-ui-react';
 export default class SendMessageForm extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +14,8 @@ export default class SendMessageForm extends Component {
     if (this.state.message) {
       let messageToPost = {
         username: this.props.user,
-        text: this.state.message
+        text: this.state.message,
+        img: this.props.img
       };
       this.props.submit(messageToPost);
       this.setState({ message: "" });
@@ -23,19 +24,19 @@ export default class SendMessageForm extends Component {
 
   render() {
     return (
-      <form onSubmit={this.postMessage}>
+      <Form onSubmit={this.postMessage} className="send-message-form">
         <label>
-          <Input
-            fluid
+          <input
             type="text"
+            className="input"
             placeholder="Type your message and click enter.."
             name="message"
             onChange={e => this.setState({ message: e.target.value })}
             value={this.state.message}
           />
         </label>
-        {/* <Button type="submit" value="Submit">Submit</Button> */}
-      </form>
+        <Button type="submit" value="Submit">Submit</Button>
+      </Form>
     );
   }
 }

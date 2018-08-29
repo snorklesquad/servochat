@@ -10,9 +10,9 @@ export default class UserQuestions extends Component {
   render() {
     return (
       <div style={{ padding: "0 1em" }}>
-        <Header style={{ textAlign: "center" }}>Questions for Tony</Header>
+        <Header className="section-header" style={{ textAlign: "center" }}>Questions for Tony</Header>
         {!this.props.queries.length && (
-          <div>
+          <div style={{ textAlign: "center" }}>
             No questions have been asked yet. Feel free to submit a question for
             Tony in the form below!
           </div>
@@ -31,7 +31,7 @@ export default class UserQuestions extends Component {
                   >
                     <Button
                       onClick={() => this.props.castVote({ q, i })}
-                      color="red"
+                      style={{backgroundColor: 'rgb(241, 97, 109)', color: 'white'}}
                       icon
                     >
                       <Icon name="heart" />
@@ -39,7 +39,7 @@ export default class UserQuestions extends Component {
                     </Button>
                   </Button>
 
-                  <Item.Extra>Asked by {q.user}</Item.Extra>
+                  <Item.Extra style={{color: 'rgba(156, 156, 156, 0.9)'}}>Asked by {q.user}</Item.Extra>
                 </Item.Content>
               </Item>
             ))}

@@ -12,7 +12,7 @@ export default class Timer extends Component {
     return (
       <div style={{textAlign: 'center'}}>
         {this.props.time > 0 && (
-          <Header>
+          <Header style={{color: '#98C379'}}>
             Time remaining this round: {this.props.time} seconds
           </Header>
         )}

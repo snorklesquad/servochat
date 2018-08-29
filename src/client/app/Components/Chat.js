@@ -25,9 +25,9 @@ export default class Chat extends Component {
   render() {
     return (
       <div >
-        <Header style={{textAlign: 'center'}}>Chatroom</Header>
+        <Header className="section-header" style={{textAlign: 'center', 'margin-top': '5px', 'margin-bottom': 0}}>Chatroom</Header>
         <MessagesList messages={this.props.messages} />
-        <SendMessageForm user={this.props.name} submit={this.postMessage} />
+        <SendMessageForm user={this.props.name} img={this.props.img} submit={this.postMessage} />
       </div>
     );
   }

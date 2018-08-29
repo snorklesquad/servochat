@@ -32,7 +32,7 @@ export default class QueryGame extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{'padding-left': '2em', 'padding-right': '2em'}}>
         <div style={{marginTop: '.75em'}}
         >
           {this.props.winningVote && (
@@ -51,7 +51,7 @@ export default class QueryGame extends Component {
                   <Item.Description style={{ margin: "1.5em auto" }}>
                     <p
                       style={{
-                        fontSize: "1.1em",
+                        fontSize: "1.5em",
                         textAlign: "center",
                         paddingTop: "1.5em"
                       }}
@@ -91,11 +91,11 @@ export default class QueryGame extends Component {
         {this.props.queries.length <= 5 &&
           !this.props.voteCast && 
           !this.props.questionAsked && (
-            <Form onSubmit={this.sendQuery} style={{marginTop: '.7em'}}>
+            <Form onSubmit={this.sendQuery} style={{marginTop: '.7em', margin: '1em auto'}}>
               <label>
                 What would you like to ask our bot?
-                <Input
-                  fluid
+                <input
+                  className="input"
                   type="text"
                   placeholder="Type your message and click enter.."
                   name="message"

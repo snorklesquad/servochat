@@ -43,7 +43,7 @@ export default class VideoPlayer extends Component {
             </div>
           )}
           {this.state.currentlyStreaming && (
-            <div>
+            <div style={{textAlign: 'center'}}>
               {/* <video
               ref={video => {
                 this.video = video;
