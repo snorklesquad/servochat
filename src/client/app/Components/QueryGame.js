@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Item, Icon, Input } from "semantic-ui-react";
+import { Form, Item, Icon, Input, Button } from "semantic-ui-react";
 import Timer from "./Timer";
 import UserQuestions from "./UserQuestions";
 import VoteResults from "./VoteResults";
@@ -9,7 +9,7 @@ export default class QueryGame extends Component {
     super();
     this.state = {
       message: "",
-      questions: [],
+      questions: []
     };
     this.castVote = this.castVote.bind(this);
     this.sendQuery = this.sendQuery.bind(this);
@@ -32,9 +32,8 @@ export default class QueryGame extends Component {
 
   render() {
     return (
-      <div style={{'padding-left': '2em', 'padding-right': '2em'}}>
-        <div style={{marginTop: '.75em'}}
-        >
+      <div style={{ "padding-left": "2em", "padding-right": "2em" }}>
+        <div style={{ marginTop: ".75em" }}>
           {this.props.winningVote && (
             <div>
               <Item>
@@ -89,21 +88,32 @@ export default class QueryGame extends Component {
         </div>
 
         {this.props.queries.length <= 5 &&
-          !this.props.voteCast && 
+          !this.props.voteCast &&
           !this.props.questionAsked && (
-            <Form onSubmit={this.sendQuery} style={{marginTop: '.7em', margin: '1em auto'}}>
-              <label>
+            <div>
+              <div style={{ textAlign: "center", fontSize: '1.1em' }}>
                 What would you like to ask our bot?
-                <input
-                  className="input"
-                  type="text"
-                  placeholder="Type your message and click enter.."
-                  name="message"
-                  onChange={e => this.setState({ message: e.target.value })}
-                  value={this.state.message}
-                />
-              </label>
-            </Form>
+              </div>
+              <Form
+                className="send-message-form"
+                onSubmit={this.sendQuery}
+                style={{ marginTop: ".7em", margin: ".4em auto" }}
+              >
+                <label>
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="Type your question and press enter..."
+                    name="message"
+                    onChange={e => this.setState({ message: e.target.value })}
+                    value={this.state.message}
+                  />
+                </label>
+                <Button type="submit" value="Submit">
+                  Submit
+                </Button>
+              </Form>
+            </div>
           )}
 
         <Timer
