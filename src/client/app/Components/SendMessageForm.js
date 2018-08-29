@@ -29,7 +29,7 @@ export default class SendMessageForm extends Component {
           <input
             type="text"
             className="input"
-            placeholder="Type your message and click enter.."
+            placeholder="Type your message and press enter..."
             name="message"
             onChange={e => this.setState({ message: e.target.value })}
             value={this.state.message}

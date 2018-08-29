@@ -25,8 +25,8 @@ export default class AvatarPicker extends React.Component {
 
   render() {
     return (
-      <div>
-        <h1 style={{fontSize: '2em', textAlign: 'center', margin: '1em'}}>Choose Your Bot</h1>
+      <div className="avatar-picker-component">
+        <h1 style={{fontSize: '2em', textAlign: 'center', margin: '1em', marginTop: '3em'}}>Choose Your Bot</h1>
         <form style={{textAlign: 'center'}} onSubmit={this.handleSubmit}>
           <div className="avatar-picker">
             <label className="avatar-item">

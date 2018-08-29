@@ -142,11 +142,6 @@ class Main extends Component {
                   img={this.state.img}
                 />
               </Segment>
-              <div style={{ textAlign: 'right' }}>
-                <Button onClick={() => { }} basic primary title="Tip the Robot.">
-                  Tip the Robot.
-                </Button>
-              </div>
             </div>
           )}
         </div>

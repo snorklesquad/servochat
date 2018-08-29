@@ -13,14 +13,14 @@ export default class UserQuestions extends Component {
         <Header className="section-header" style={{ textAlign: "center" }}>Questions for Tony</Header>
         {!this.props.queries.length && (
           <div style={{ textAlign: "center" }}>
-            No questions have been asked yet. Feel free to submit a question for
+            No questions have been asked yet. Submit a question for
             Tony in the form below!
           </div>
         )}
         <Item.Group>
           {this.props.queries &&
             this.props.queries.map((q, i) => (
-              <Item key={i}>
+              <Item style={{maxWidth: '80%', margin: '1em auto'}} key={i}>
                 <Item.Content verticalAlign="middle">
                   <strong>{q.question}</strong>
                   <Button

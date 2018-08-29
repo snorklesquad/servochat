@@ -1,6 +1,6 @@
 body {
   background-color: #38393d;
-  color: #C678DD;
+  color: rgb(198, 120, 221);
 }
 
 hr {
@@ -102,7 +102,7 @@ hr {
 }
 
 .users {
-  border: 1px solid rgb(121, 143, 161);
+  border: 1px solid rgba(198, 120, 221, .4);
   border-radius: 5px;
   padding: 1em;
   overflow: auto;
@@ -183,6 +183,10 @@ hr {
   grid-gap: 4em;
   max-width: 800px;
   margin: 0 auto;
+}
+
+.avatar-picker-component {
+  animation: fadein 1s ease-in-out;
 }
 
 /* .avatar-picker * {
