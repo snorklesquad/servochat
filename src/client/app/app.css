@@ -1,5 +1,6 @@
 body {
-  background-color: #38393d;
+  /* background-color: #38393d; */
+  /* background-image: url('https://i.imgur.com/BNGDDP9.jpg'); */
   color: rgb(198, 120, 221);
 }
 
@@ -25,6 +26,9 @@ hr {
     /* grid-template-columns: 1fr; */
     grid-gap: 1.5em;
   }
+  .top-title {
+    display: none;
+  }
 }
 
 @media only screen and (max-width: 991px) and (min-width: 768px) {
@@ -37,6 +41,9 @@ hr {
     display: grid;
     /* grid-template-columns: 1fr; */
     grid-gap: 1.5em;
+  }
+  .top-title {
+    display: none;
   }
 }
 
@@ -51,6 +58,9 @@ hr {
     /* grid-template-columns: 1fr; */
     grid-gap: 1.5em;
   }
+  .top-title {
+    display: none;
+  }
 }
 
 @media only screen and (min-width: 1300px) {
@@ -64,6 +74,17 @@ hr {
     grid-template-columns: 1fr 1fr;
     grid-gap: 1.5em;
   }
+  .top-title {
+    text-shadow: 1px 2px #29292b !important;
+    top: 0;
+    left: 0;
+    padding: .6em;
+    position: absolute;
+  }
+}
+
+.container {
+  padding-top: 1em;
 }
 
 .chat {
@@ -110,7 +131,8 @@ hr {
 
 .room {
   padding: 0 1.5em;
-  max-height: 600px;
+  /* max-height: 600px; */
+  height: 400px;
   overflow: auto;
   margin-bottom: 1em;
   color: rgb(229, 230, 231) !important;
@@ -135,6 +157,8 @@ hr {
 .game:hover {
   box-shadow: 0 3px 5px 0 rgba(0,0,0,.1) !important;
 }
+
+
 
 @keyframes fade {
   from {
@@ -181,12 +205,20 @@ hr {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
   grid-gap: 4em;
-  max-width: 800px;
+  max-width: 60%;
   margin: 0 auto;
 }
 
 .avatar-picker-component {
   animation: fadein 1s ease-in-out;
+}
+
+.main-container {
+  background-color: rgba(20, 20, 30, 0.6);
+  min-height: 100vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 /* .avatar-picker * {

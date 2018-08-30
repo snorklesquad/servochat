@@ -97,7 +97,7 @@ class Main extends Component {
 
   render() {
     return (
-      <div>
+      <div className="main-container">
         {this.props.auth &&
           <Menu>
             <Button onClick={this.startTimer} basic primary>Start Timer</Button>        
@@ -106,13 +106,13 @@ class Main extends Component {
             </Button>
           </Menu>
         }
-        <div className="container" style={{ marginTop: 30 }}>
+        <div className="container">
           {!this.state.verified && <Splash verifyUser={this.verifyUser} />}
           {this.state.verified && (
             <div>
-              <div>
-                <h1>ServoChat</h1>
-              </div>
+              {/* <div>
+                <h1 className="top-title">ServoChat</h1>
+              </div> */}
               {this.state.streaming &&
                 <Segment className="game query-game">
                   <VideoPlayer />
@@ -132,7 +132,6 @@ class Main extends Component {
                   </Button>
                 </div>
               )}
-              <hr />
               <Segment className="chat query-game">
                 <Users users={this.state.users} />
                 <Chat
