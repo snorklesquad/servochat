@@ -30,7 +30,7 @@ export default class VideoPlayer extends Component {
 
   render() {
     return (
-      <div>
+      <div className="video-player">
         <Container fluid>
           {!this.state.currentlyStreaming && (
             <div>
