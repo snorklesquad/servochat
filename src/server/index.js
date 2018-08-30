@@ -7,8 +7,8 @@ const io = (module.exports.io = require("socket.io")(http, {
   pingInterval: 100000,
   pingTimeout: 500000
 }));
-const { markov } = require('./responseGenerator/markov')
-const { redditor } = require('./responseGenerator/redditor')
+const { markov } = require("./responseGenerator/markov");
+const { redditor } = require("./responseGenerator/redditor");
 
 app.use(bodyParser.json());
 
@@ -16,13 +16,13 @@ const messages = [
   {
     username: "welcome_bot",
     text: "Hello and welcome to the chat!",
-    img: 'robot-10.svg'
+    img: "robot-10.svg"
   }
 ];
 var users = [
-  {username: 'markov_bot', socket: null, img: 'robot-10.svg'},
-  {username: 'reddit_bot', socket: null, img: 'robot-10.svg'}
-]; 
+  { username: "markov_bot", socket: null, img: "robot-10.svg" },
+  { username: "reddit_bot", socket: null, img: "robot-10.svg" }
+];
 var votes = {};
 var queries = [];
 var winner = null;
@@ -32,7 +32,7 @@ var socketConnections = 0;
 
 const startTimer = () => {
   if (timer == 0) {
-    io.emit('receive_time', time);
+    io.emit("receive_time", time);
     timer = setInterval(countdown, 1000);
   }
 };
@@ -62,18 +62,26 @@ const tallyVotes = () => {
   io.emit("receive_vote", votes);
 };
 
-const sendBotMessageToggle = (data) => {
-  if (Math.random() > 0) {
-    redditor(data).then((response)=>{
-      // if(response === undefined) return sendBotMessageToggle(data);
-      messages.push({username: 'redditor_bot', text: response, img: 'robot-10.svg'})
+const sendBotMessageToggle = data => {
+  redditor(data).then(response => {
+    console.log(response);
+    if (response === undefined) {
+      console.log('hitting the markov');
+      messages.push({
+        username: "markov_bot",
+        text: markov(10),
+        img: "robot-10.svg"
+      });
+    } else {
+      messages.push({
+        username: "redditor_bot",
+        text: response,
+        img: "robot-10.svg"
+      });
       setTimeout(() => io.emit("receive_message", messages), 200);
-    })
-  } else {
-    messages.push({username: 'markov_bot', text: markov(10), img: 'robot-10.svg'})
-    setTimeout(() => io.emit("receive_message", messages), 200);
-  }
-}
+    }
+  });
+};
 
 io.on("connection", socket => {
   console.log("user connected: ", socket.id);
@@ -88,7 +96,7 @@ io.on("connection", socket => {
 
   socket.on("send_message", data => {
     messages.push(data);
-    io.emit('receive_message', messages);
+    io.emit("receive_message", messages);
     if (Math.random() > 0.25) {
       sendBotMessageToggle(data.text);
     }
@@ -143,14 +151,14 @@ io.on("connection", socket => {
     io.emit("receive_query", queries);
     io.emit("receive_vote", votes);
     io.emit("winning_query", winner);
-    io.emit('game_reset');
+    io.emit("game_reset");
   });
 
   socket.on("disconnect", reason => {
     socketConnections--;
-    if(users.findIndex(u => u.socket === socket.id) !== -1) {
+    if (users.findIndex(u => u.socket === socket.id) !== -1) {
       users.splice(users.findIndex(u => u.socket === socket.id), 1);
-    };
+    }
     io.emit("disconnect_user", users);
     console.log("user disconnected: ", socket.id);
     console.log("current number of connections: ", socketConnections);
@@ -168,13 +176,15 @@ app.post("/auth", (req, res) => {
 });
 
 app.post("/markov", (req, res) => {
-  res.send(markov(10))
-})
+  res.send(markov(10));
+});
 
 app.post("/redditor", (req, res) => {
-  redditor(req.body.query).then((response)=>{res.send(response)})
+  redditor(req.body.query).then(response => {
+    res.send(response);
+  });
   // redditor(winner).then((response) => {res.send(response)});
-})
+});
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/index.html"));

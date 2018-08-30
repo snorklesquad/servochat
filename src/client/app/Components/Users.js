@@ -12,7 +12,7 @@ class Users extends React.Component {
         <Header className="section-header" style={{ textAlign: "center" }}>
           Users Online: {this.props.users.length}
         </Header>
-        <div style={{'margin-left': '1.5em'}}>
+        <div style={{'margin-left': '1em'}}>
           {this.props.users.map((user, i) => {
             return (
               <div style={{ margin: ".8em auto" }} key={i}>
