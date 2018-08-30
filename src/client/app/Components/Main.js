@@ -12,8 +12,9 @@ class Main extends Component {
     super();
     this.state = {
       name: "",
+      img: "",
       verified: false,
-      streaming: false,
+      streaming: true,
       users: [],
       messages: [],
       queries: [],
@@ -47,7 +48,7 @@ class Main extends Component {
 
   componentDidMount() {
     if (this.props.auth) {
-      this.verifyUser('tony_bot');
+      this.verifyUser('tony_bot', 'robot-10.svg');
     }
   }
 
@@ -83,19 +84,20 @@ class Main extends Component {
 
   sendMessage = msg => { this.socket.emit("send_message", msg); };
 
-  verifyUser = name => {
+  verifyUser = (name, img) => {
     this.socket.emit("send_user", {
       username: name,
-      socket: this.state.socketID
+      socket: this.state.socketID,
+      img
     });
-    this.setState({ name, verified: true });
+    this.setState({ name, img, verified: true });
   };
 
   disconnectUser = data => { this.setState({ users: data }); };
 
   render() {
     return (
-      <div>
+      <div className="main-container">
         {this.props.auth &&
           <Menu>
             <Button onClick={this.startTimer} basic primary>Start Timer</Button>        
@@ -104,15 +106,15 @@ class Main extends Component {
             </Button>
           </Menu>
         }
-        <Container style={{ marginTop: 30 }}>
+        <div className="container">
           {!this.state.verified && <Splash verifyUser={this.verifyUser} />}
           {this.state.verified && (
             <div>
-              <div>
-                <h1>ServoChat</h1>
-              </div>
+              {/* <div>
+                <h1 className="top-title">ServoChat</h1>
+              </div> */}
               {this.state.streaming &&
-                <Segment className="game">
+                <Segment className="game query-game">
                   <VideoPlayer />
                   <QueryGame questionAsked={this.state.questionAsked} voteCast={this.state.voteCast} time={this.state.time} auth={this.props.auth} winningVote={this.state.winningVote} tallyVotes={this.tallyVotes} sendQuery={this.sendQuery} queries={this.state.queries} votes={this.state.votes} castVote={this.castVote} user={this.state.name} />
                 </Segment>
@@ -130,22 +132,18 @@ class Main extends Component {
                   </Button>
                 </div>
               )}
-              <Segment className="chat">
+              <Segment className="chat query-game">
                 <Users users={this.state.users} />
                 <Chat
                   messages={this.state.messages}
                   sendMessage={this.sendMessage}
                   name={this.state.name}
+                  img={this.state.img}
                 />
               </Segment>
-              <div style={{ textAlign: 'right' }}>
-                <Button onClick={() => { }} basic primary title="Tip the Robot.">
-                  Tip the Robot.
-                </Button>
-              </div>
             </div>
           )}
-        </Container>
+        </div>
       </div>
     );
   }
