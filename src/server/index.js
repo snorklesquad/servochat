@@ -2,12 +2,13 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
+const request = require("request-promise");
 const http = require("http").Server(app);
 const io = (module.exports.io = require("socket.io")(http, {
   pingInterval: 100000,
   pingTimeout: 500000
 }));
-const { markov } = require('./responseGenerator/markov')
+const { markov, token, analyzer } = require('./responseGenerator/markov')
 const { redditor } = require('./responseGenerator/redditor')
 
 app.use(bodyParser.json());
@@ -21,7 +22,7 @@ const messages = [
 var users = [
   {username: 'markov_bot', socket: null},
   {username: 'reddit_bot', socket: null}
-]; 
+];
 var votes = {};
 var queries = [];
 var winner = null;
@@ -61,16 +62,34 @@ const tallyVotes = () => {
   io.emit("receive_vote", votes);
 };
 
+const askTheNet = (message) => {
+  let query = message.body;
+      tokens = token(query);
+      options = {
+        method: 'POST',
+        uri: 'http://localhost:5000/predict',
+        body: tokens.join(' '),
+        json: true
+      }
+  request(options).then((data) => {
+    messages.push({username: 'karenn', text: data.slice(40).trim()})
+    setTimeout(() => io.emit("receive_message", messages), 200);
+  })
+}
+
+
 const sendBotMessageToggle = (data) => {
-  if (Math.random() > 0) {
+  let decider = Math.random()
+  if (decider > 0.5) {
     redditor(data).then((response)=>{
-      // if(response === undefined) return sendBotMessageToggle(data);
       messages.push({username: 'redditor_bot', text: response})
       setTimeout(() => io.emit("receive_message", messages), 200);
     })
-  } else {
+  } else if (decider < 0.2) {
     messages.push({username: 'markov_bot', text: markov(10)})
     setTimeout(() => io.emit("receive_message", messages), 200);
+  } else {
+    askTheNet(data)
   }
 }
 
