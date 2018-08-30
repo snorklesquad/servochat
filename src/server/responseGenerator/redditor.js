@@ -37,7 +37,7 @@ const redditor = (query) => {query = qs.stringify({q: query}); console.log(query
           return getResponse()
         }
       }(text)
-    
+
   )
 
 }

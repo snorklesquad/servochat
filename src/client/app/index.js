@@ -21,7 +21,12 @@ class App extends React.Component {
   render() {
     return (
       <Router>
-        <div>
+        <div style={{
+          'background-image': 'url(https://i.imgur.com/BNGDDP9.jpg)',
+          'height': '100vh',
+          'overflow': 'auto',
+          'animation': 'fadein 1s ease-in-out'
+        }}>
         <Route
           exact
           path="/"
