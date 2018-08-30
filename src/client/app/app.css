@@ -29,6 +29,32 @@ hr {
   .top-title {
     display: none;
   }
+  .chat {
+    display: grid;
+    grid-gap: 1.5em;
+    padding: 1.5em;
+    animation: fade 1s ease-in-out;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) !important;
+  }
+  .users {
+    display: none;
+  }
+  .room {
+    padding: 0;
+  }
+  .splash-inner {
+    width: 75%;
+  }
+  .avatar-picker {
+    max-width: 85%;
+    grid-template-columns: 1fr 1fr;
+  }
+  iframe {
+    width: 100% !important;
+  }
+  .splash-header {
+    font-size: 3em !important;
+  }
 }
 
 @media only screen and (max-width: 991px) and (min-width: 768px) {
@@ -45,6 +71,25 @@ hr {
   .top-title {
     display: none;
   }
+  .chat {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 1.5em;
+    padding: 1.5em;
+    animation: fade 1s ease-in-out;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) !important;
+  }
+  .room {
+    padding: 0;
+  }
+  .splash-inner {
+    width: 65%;
+  }
+  .avatar-picker {
+    max-width: 75%;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+
+  }
 }
 
 @media only screen and (max-width: 1299px) and (min-width: 992px) {
@@ -60,6 +105,25 @@ hr {
   }
   .top-title {
     display: none;
+  }
+  .chat {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 1.5em;
+    padding: 1.5em;
+    animation: fade 1s ease-in-out;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) !important;
+  }
+  .room {
+    padding: 0 1.5em;
+  }
+  .splash-inner {
+    width: 50%;
+  }
+  .avatar-picker {
+    max-width: 75%;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+
   }
 }
 
@@ -81,19 +145,28 @@ hr {
     padding: .6em;
     position: absolute;
   }
+  .chat {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-gap: 1.5em;
+    padding: 1.5em;
+    animation: fade 1s ease-in-out;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) !important;
+  }
+  .room {
+    padding: 0 1.5em;
+  }
+  .splash-inner {
+    width: 25%;
+  }
+  .avatar-picker {
+    max-width: 60%;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
 }
 
 .container {
   padding-top: 1em;
-}
-
-.chat {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  grid-gap: 1.5em;
-  padding: 1.5em;
-  animation: fade 1s ease-in-out;
-  box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) !important;
 }
 
 .chat:hover{
@@ -130,7 +203,6 @@ hr {
 }
 
 .room {
-  padding: 0 1.5em;
   /* max-height: 600px; */
   height: 400px;
   overflow: auto;
@@ -202,10 +274,8 @@ hr {
 
 .avatar-picker {
   display:grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
   grid-gap: 4em;
-  max-width: 60%;
   margin: 0 auto;
 }
 
@@ -261,8 +331,7 @@ hr {
   right: 0;
   bottom: 0;
   left: 0;
-  width: 450px;
-  height: 400px;
+  max-height: 400px;
 }
 
 .splash-header {
