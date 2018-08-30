@@ -1,5 +1,5 @@
 body {
-  /* background-color: #38393d; */
+  background-color: #27272b;
   /* background-image: url('https://i.imgur.com/BNGDDP9.jpg'); */
   color: rgb(198, 120, 221);
 }
@@ -220,6 +220,7 @@ hr {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
 
 /* .avatar-picker * {
   width: 120px;

@@ -64,7 +64,6 @@ const tallyVotes = () => {
 
 const sendBotMessageToggle = data => {
   redditor(data).then(response => {
-    console.log(response);
     if (response === undefined) {
       console.log('hitting the markov');
       messages.push({
@@ -78,8 +77,8 @@ const sendBotMessageToggle = data => {
         text: response,
         img: "robot-10.svg"
       });
-      setTimeout(() => io.emit("receive_message", messages), 200);
     }
+    setTimeout(() => io.emit("receive_message", messages), 200);
   });
 };
 

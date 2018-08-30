@@ -24,7 +24,8 @@ class App extends React.Component {
         <div style={{
           'background-image': 'url(https://i.imgur.com/BNGDDP9.jpg)',
           'height': '100vh',
-          'overflow': 'auto'
+          'overflow': 'auto',
+          'animation': 'fadein 1s ease-in-out'
         }}>
         <Route
           exact
