@@ -73,11 +73,10 @@ const askTheNet = (message) => {
         json: true
       }
   request(options).then((data) => {
-    messages.push({username: 'karenn', text: data.slice(40).trim()})
+    messages.push({username: 'karenn', text: data.slice(40).trim(), img: "robot-10.svg"})
     setTimeout(() => io.emit("receive_message", messages), 200);
   })
 }
-
 
 const sendBotMessageToggle = (data) => {
   let decider = Math.random()
