@@ -60,7 +60,7 @@ const tallyVotes = () => {
   );
   let winningVote = sortedVotes[0];
   winner = votes[winningVote];
-  askTony(winner);
+  askTony(winner.question);
   io.emit("winning_query", winner);
   votes = [];
   queries = [];
@@ -69,9 +69,10 @@ const tallyVotes = () => {
 };
 
 const askTony = (data) => {
+  console.log(data.split(' '))
   let decider = Math.random(),
-      sentiment = analyzer(data);
-
+    sentiment = analyzer.getSentiment(data.split(' '));
+    console.log('heres the sentiment: ', sentiment);
   messagesForTony = [];
   if (decider < 0.4) {
     console.log('hitting the reddit')

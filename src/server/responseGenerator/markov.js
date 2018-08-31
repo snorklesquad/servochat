@@ -119,3 +119,4 @@ const longestWord = findLongestWord(tokens)
 
 module.exports.token = token
 module.exports.markov = sentenceGen
+module.exports.analyzer = analyzer
