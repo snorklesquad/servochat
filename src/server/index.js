@@ -256,20 +256,20 @@ app.get("*", (req, res) => {
 });
 
 const chitChat = () => {
-  let timer = Math.random().toFixed() * 1000,
+  let timer = Math.random() * 50000,
       decider = Math.random(),
       markovian = markov(10);
   messages.push({
-    username: "markov_bot",
+    username: "Markov13378008",
     text: markovian,
-    img: "robot-10.svg"
+    img: "robot-15.svg"
   })
-  setTimeout(timer, () => io.emit("receive_message", messages), 200)
+  setTimeout(() => io.emit("receive_message", messages), timer)
   if (decider >= 0.5) {
     askTheNet(markovian, messages)
   }
 }
 
-setInterval(1000, () => chitChat())
+setInterval(() => {chitChat()}, 10000)
 
 http.listen(process.env.PORT || 8080, () => console.log("on 8080"));
