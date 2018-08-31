@@ -270,6 +270,6 @@ const chitChat = () => {
   }
 }
 
-setInterval(1000, chitChat)
+setInterval(1000, () => chitChat())
 
 http.listen(process.env.PORT || 8080, () => console.log("on 8080"));
