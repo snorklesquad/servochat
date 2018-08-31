@@ -9,10 +9,10 @@ class Users extends React.Component {
   render() {
     return (
       <div className="users">
-        <Header className="section-header" style={{ textAlign: "center" }}>
+        <Header className="section-header" style={{ textAlign: "center", 'margin-bottom': 0}}>
           Users Online: {this.props.users.length}
         </Header>
-        <div style={{'margin-left': '1em'}}>
+        <div style={{'margin-left': '1em', 'overflow': 'auto', 'height': 410}}>
           {this.props.users.map((user, i) => {
             return (
               <div style={{ margin: ".8em auto" }} key={i}>
@@ -23,7 +23,7 @@ class Users extends React.Component {
                     height={"30px"}
                   />
                 </span>
-                <span style={{ fontSize: "1.2em", marginLeft: "15px" }}>
+                <span style={{ fontSize: "1.2em", marginLeft: "7.5px" }}>
                   {user.username}
                 </span>
               </div>
