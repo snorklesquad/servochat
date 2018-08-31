@@ -24,8 +24,9 @@ const messages = [
 let messagesForTony = [];
 
 var users = [
-  { username: "markov_bot", socket: null, img: "robot-10.svg" },
-  { username: "reddit_bot", socket: null, img: "robot-10.svg" }
+  { username: "Markov13378008", socket: null, img: "robot-15.svg" },
+  { username: "PM_YOUR_REDDIT_COMMENTS", socket: null, img: "robot-13.svg" },
+  { username: "dubstep99", socket: null, img: "robot-11.svg" }
 ];
 
 var votes = {};
