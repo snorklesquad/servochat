@@ -21,7 +21,7 @@ const messages = [
   }
 ];
 
-let messagesForTony = [];
+let messagesForTony = [{ text: "Hey friend, my name's Tony.", sentiment: 0.6 }];
 
 var users = [
   { username: "Markov13378008", socket: null, img: "robot-15.svg" },
