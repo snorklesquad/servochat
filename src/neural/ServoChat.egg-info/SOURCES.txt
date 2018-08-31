@@ -1,0 +1,12 @@
+README.txt
+setup.py
+ServoChat.egg-info/PKG-INFO
+ServoChat.egg-info/SOURCES.txt
+ServoChat.egg-info/dependency_links.txt
+ServoChat.egg-info/requires.txt
+ServoChat.egg-info/top_level.txt
+chatbot/__init__.py
+chatbot/prep_data.py
+chatbot/run_server.py
+scripts/numpy_install.py
+scripts/tf_install.py

@@ -1,6 +1,6 @@
-const natural = require('natural')
-const fs = require('fs')
-const Analyzer = natural.SentimentAnalyzer
+const natural = require('natural');
+const fs = require('fs');
+const Analyzer = natural.SentimentAnalyzer;
 const stemmer = natural.PorterStemmer
 const analyzer = new Analyzer('English', stemmer, 'afinn')
 const Pride = fs.readFileSync('./src/server/responseGenerator/data/smallData.txt', 'utf8')
@@ -9,6 +9,15 @@ const tri = NGrams.trigrams(Pride)
 const bi = NGrams.bigrams(Pride)
 const tokenizer = new natural.WordPunctTokenizer()
 const pride = Pride.replace(/[^\u0000-\u007F]+/gi, '');
+
+stemmer.attach()
+
+const token = (message) => {
+  console.log(message)
+  return message.tokenizeAndStem()
+}
+
+
 
 const tokens = tokenizer.tokenize(pride)
 
@@ -108,5 +117,6 @@ const findLongestWord = (tokens) => {
 
 const longestWord = findLongestWord(tokens)
 
-
+module.exports.token = token
 module.exports.markov = sentenceGen
+module.exports.analyzer = analyzer

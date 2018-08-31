@@ -17,7 +17,9 @@ export default class Splash extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState({ nameSubmitted: true });
+    if (this.state.name) {
+      this.setState({ nameSubmitted: true });
+    }
   }
 
   handleAvatarSelect(img) {
@@ -63,7 +65,7 @@ export default class Splash extends React.Component {
             </div>
           </div>
         )}
-        {this.state.nameSubmitted && (
+        {this.state.nameSubmitted && this.state.name && (
           <AvatarPicker
             handleAvatarSelect={this.handleAvatarSelect}
             handleAvatarSubmit={this.handleAvatarSubmit}

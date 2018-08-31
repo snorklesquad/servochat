@@ -7,11 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "./node_modules/.bin/webpack -d --watch",
     "server": "nodemon src/server/index.js",
-    "start": "node src/server/index.js"
+    "start": "node src/server/index.js",
+    "neural": "python3 src/neural/chatbot/__init__.py"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "afinn-165": "^1.0.2",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.5",
     "babel-preset-es2015": "^6.24.1",

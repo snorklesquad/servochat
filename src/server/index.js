@@ -2,13 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
+const request = require("request-promise");
 const http = require("http").Server(app);
 const io = (module.exports.io = require("socket.io")(http, {
   pingInterval: 100000,
   pingTimeout: 500000
 }));
-const { markov } = require("./responseGenerator/markov");
-const { redditor } = require("./responseGenerator/redditor");
+const { markov, token, analyzer } = require('./responseGenerator/markov')
+const { redditor } = require('./responseGenerator/redditor')
 
 app.use(bodyParser.json());
 
@@ -19,10 +20,15 @@ const messages = [
     img: "robot-10.svg"
   }
 ];
+
+let messagesForTony = [];
+
 var users = [
-  { username: "markov_bot", socket: null, img: "robot-10.svg" },
-  { username: "reddit_bot", socket: null, img: "robot-10.svg" }
+  { username: "Markov13378008", socket: null, img: "robot-15.svg" },
+  { username: "PM_YOUR_REDDIT_COMMENTS", socket: null, img: "robot-13.svg" },
+  { username: "dubstep99", socket: null, img: "robot-11.svg" }
 ];
+
 var votes = {};
 var queries = [];
 var winner = null;
@@ -54,7 +60,7 @@ const tallyVotes = () => {
   );
   let winningVote = sortedVotes[0];
   winner = votes[winningVote];
-  sendBotMessageToggle(winner);
+  askTony(winner.question);
   io.emit("winning_query", winner);
   votes = [];
   queries = [];
@@ -62,25 +68,81 @@ const tallyVotes = () => {
   io.emit("receive_vote", votes);
 };
 
-const sendBotMessageToggle = data => {
-  redditor(data).then(response => {
-    if (response === undefined) {
-      console.log('hitting the markov');
-      messages.push({
-        username: "markov_bot",
-        text: markov(10),
-        img: "robot-10.svg"
-      });
+const askTony = (data) => {
+  console.log(data.split(' '))
+  let decider = Math.random(),
+    sentiment = analyzer.getSentiment(data.split(' '));
+    console.log('heres the sentiment: ', sentiment);
+  messagesForTony = [];
+  if (decider < 0.4) {
+    console.log('hitting the reddit')
+    redditor(data).then(response => {
+      if (!response) {
+        console.log('hitting the markov');
+        messagesForTony.push({
+          text: markov(10),
+          sentiment: sentiment
+        });
+      } else {
+        messagesForTony.push({
+          text: response,
+          sentiment: sentiment
+        });
+      }
+    })
+  } else {
+    console.log('hitting whatever this thing is')
+    askTheNet(data, messagesForTony, sentiment)
+  }
+}
+
+
+const askTheNet = (message, chat, sentiment) => {
+  let query = message;
+      tokens = token(query);
+      options = {
+        method: 'POST',
+        uri: 'http://localhost:5000/predict',
+        body: tokens.join(' '),
+        json: true
+      }
+  request(options).then((data) => {
+    if (sentiment === undefined)  {
+      chat.push({username: 'dubstep_lives', text: data.predictions.slice(40).trim(), img: "robot-11.svg"})
+      setTimeout(() => io.emit("receive_message", chat), 200);
     } else {
-      messages.push({
-        username: "redditor_bot",
-        text: response,
-        img: "robot-10.svg"
-      });
+      chat = [];
+      chat.push({ text: data.predictions.slice(40, 103).trim(), sentiment: sentiment })
     }
-    setTimeout(() => io.emit("receive_message", messages), 200);
-  });
-};
+  })
+}
+
+const sendBotMessageToggle = (data) => {
+  let decider = Math.random()
+  if (decider > 0.4) {
+    console.log('hitting the reddit')
+    redditor(data).then(response => {
+      if (!response) {
+        console.log('hitting the markov');
+        messages.push({
+          username: "markov13378008",
+          text: markov(10),
+          img: "robot-15.svg"
+        });
+      } else {
+        messages.push({
+          username: "PM_YOUR_REDDIT_COMMENTS",
+          text: response,
+          img: "robot-13.svg"
+        });
+      }
+      setTimeout(() => io.emit("receive_message", messages), 200)
+    })
+  } else {
+    console.log('hitting whatever this thing is')
+    askTheNet(data, messages)
+  }
+}
 
 io.on("connection", socket => {
   console.log("user connected: ", socket.id);
@@ -177,6 +239,10 @@ app.post("/auth", (req, res) => {
 app.post("/markov", (req, res) => {
   res.send(markov(10));
 });
+
+app.get("/tony", (req, res) => {
+  res.send(messagesForTony)
+})
 
 app.post("/redditor", (req, res) => {
   redditor(req.body.query).then(response => {
