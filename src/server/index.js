@@ -241,7 +241,7 @@ app.post("/markov", (req, res) => {
 });
 
 app.get("/tony", (req, res) => {
-  res.send(JSONstringify(messagesForTony))
+  res.send(JSON.stringify(messagesForTony))
 })
 
 app.post("/redditor", (req, res) => {
