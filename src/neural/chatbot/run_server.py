@@ -20,7 +20,7 @@ app = flask.Flask(__name__)
 
 with g.as_default():
     print('Loading model...')
-    model = load_model('./models/red_brain.h5')
+    model = load_model('./src/neural/models/red_brain.h5')
 
 @app.route("/predict", methods=["POST"])
 def predict():
@@ -30,7 +30,7 @@ def predict():
         generated = ''
         sentence = text[start_index: start_index + maxlen - len(flask.request.get_json(force=True)) ] + flask.request.get_json(force=True)
         generated += sentence
-        for i in range(64):
+        for i in range(300):
 
             x_pred = np.zeros((1, maxlen, len(chars)))
             for t, char in enumerate(sentence):

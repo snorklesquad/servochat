@@ -5,7 +5,7 @@ import io
 
 global maxlen
 
-with io.open('./data/data.txt', encoding='utf-8') as f:
+with io.open('./src/neural/data/data.txt', encoding='utf-8') as f:
     text = f.read().lower()
 print('corpus length:', len(text))
 

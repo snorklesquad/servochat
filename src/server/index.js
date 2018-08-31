@@ -20,10 +20,14 @@ const messages = [
     img: "robot-10.svg"
   }
 ];
+
+let messagesForTony = [];
+
 var users = [
   { username: "markov_bot", socket: null, img: "robot-10.svg" },
   { username: "reddit_bot", socket: null, img: "robot-10.svg" }
 ];
+
 var votes = {};
 var queries = [];
 var winner = null;
@@ -55,7 +59,7 @@ const tallyVotes = () => {
   );
   let winningVote = sortedVotes[0];
   winner = votes[winningVote];
-  sendBotMessageToggle(winner);
+  askTony(winner);
   io.emit("winning_query", winner);
   votes = [];
   queries = [];
@@ -63,8 +67,36 @@ const tallyVotes = () => {
   io.emit("receive_vote", votes);
 };
 
-const askTheNet = (message) => {
-  let query = message.body;
+const askTony = (data) => {
+  let decider = Math.random(),
+      sentiment = analyzer(data);
+
+  messagesForTony = [];
+  if (decider < 0.4) {
+    console.log('hitting the reddit')
+    redditor(data).then(response => {
+      if (!response) {
+        console.log('hitting the markov');
+        messagesForTony.push({
+          text: markov(10),
+          sentiment: sentiment
+        });
+      } else {
+        messagesForTony.push({
+          text: response,
+          sentiment: sentiment
+        });
+      }
+    })
+  } else {
+    console.log('hitting whatever this thing is')
+    askTheNet(data, messagesForTony, sentiment)
+  }
+}
+
+
+const askTheNet = (message, chat, sentiment) => {
+  let query = message;
       tokens = token(query);
       options = {
         method: 'POST',
@@ -73,16 +105,22 @@ const askTheNet = (message) => {
         json: true
       }
   request(options).then((data) => {
-    messages.push({username: 'karenn', text: data.slice(40).trim(), img: "robot-10.svg"})
-    setTimeout(() => io.emit("receive_message", messages), 200);
+    if (sentiment === undefined)  {
+      chat.push({username: 'karenn', text: data.predictions.slice(40).trim(), img: "robot-10.svg"})
+      setTimeout(() => io.emit("receive_message", chat), 200);
+    } else {
+      chat = [];
+      chat.push({ text: data.predictions.slice(40, 103).trim(), sentiment: sentiment })
+    }
   })
 }
 
 const sendBotMessageToggle = (data) => {
   let decider = Math.random()
-  if (decider > 0.5) {
+  if (decider > 0.4) {
+    console.log('hitting the reddit')
     redditor(data).then(response => {
-      if (response === undefined) {
+      if (!response) {
         console.log('hitting the markov');
         messages.push({
           username: "markov_bot",
@@ -97,9 +135,10 @@ const sendBotMessageToggle = (data) => {
         });
       }
       setTimeout(() => io.emit("receive_message", messages), 200)
-    }
+    })
   } else {
-    askTheNet(data)
+    console.log('hitting whatever this thing is')
+    askTheNet(data, messages)
   }
 }
 
@@ -198,6 +237,10 @@ app.post("/auth", (req, res) => {
 app.post("/markov", (req, res) => {
   res.send(markov(10));
 });
+
+app.get("/tony", (req, res) => {
+  res.send(messagesForTony)
+})
 
 app.post("/redditor", (req, res) => {
   redditor(req.body.query).then(response => {
