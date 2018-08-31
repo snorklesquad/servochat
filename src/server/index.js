@@ -107,7 +107,7 @@ const askTheNet = (message, chat, sentiment) => {
       }
   request(options).then((data) => {
     if (sentiment === undefined)  {
-      chat.push({username: 'karenn', text: data.predictions.slice(40).trim(), img: "robot-10.svg"})
+      chat.push({username: 'dubstep_lives', text: data.predictions.slice(40).trim(), img: "robot-11.svg"})
       setTimeout(() => io.emit("receive_message", chat), 200);
     } else {
       chat = [];
@@ -124,15 +124,15 @@ const sendBotMessageToggle = (data) => {
       if (!response) {
         console.log('hitting the markov');
         messages.push({
-          username: "markov_bot",
+          username: "markov13378008",
           text: markov(10),
-          img: "robot-10.svg"
+          img: "robot-15.svg"
         });
       } else {
         messages.push({
-          username: "redditor_bot",
+          username: "PM_YOUR_REDDIT_COMMENTS",
           text: response,
-          img: "robot-10.svg"
+          img: "robot-13.svg"
         });
       }
       setTimeout(() => io.emit("receive_message", messages), 200)
