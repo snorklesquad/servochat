@@ -60,7 +60,7 @@ export default class VideoPlayer extends Component {
                 type="text/html"
                 width="640"
                 height="360"
-                src="https://youtube.com/embed/Ea-Xb30Ekh4"
+                src="https://youtube.com/embed/PQXfZeNx6Wk"
                 frameBorder="0"
               />
               
